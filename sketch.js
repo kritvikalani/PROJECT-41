@@ -4,16 +4,18 @@ const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
 var engine, world;
-var thunder;
+var thunder, thunder1, thunder2, thunder3, thunder4;
 var Umboy;
 var umboyImage;
 var Drops = []
 var maxDrops = 100;
+var rand;
 
 function preload(){
-    //umboyImage = loadImage("walking_1.png")
-    /*thunder1 = loadImage("1.png")
-    thunder2 = loadImage("2.png")*/
+    thunder1 = loadImage("1.png")
+    thunder2 = loadImage("2.png")
+    thunder3 = loadImage("3.png")
+    thunder4 = loadImage("4.png")
 }
 
 function setup(){
@@ -21,10 +23,12 @@ function setup(){
    engine = Engine.create();
    world = engine.world; 
 
+    if (frameCount%130===0) {
+        for(var i=0; i<maxDrops; i++){
+            Drops.push(new drops(random(0,400), random(0,400)));
+        }
+    }
 
-   for(var i=0; i<maxDrops; i++){
-       Drops.push(new drops(random(0,400), random(0,400)));
-   }
    Umboy = new umbrella(200,700)
 }
 
@@ -32,17 +36,28 @@ function draw(){
     background("black");
     Engine.update(engine)
 
-    if(frameCount%20===0) {
-    switch(thunder) {
-        case 10: thunder= loadImage("1.png")
+    rand = Math.round(random(1,4))
+    if(frameCount%80===0) {
+        thunder = createSprite(random(10, 300), random(10, 30))
+    switch(rand) {
+        case 1: thunder.addImage(thunder1)
         break;
-        case 20: thunder= loadImage("2.png")
+        case 2: thunder.addImage(thunder2)
+        break;
+        case 3: thunder.addImage(thunder3)
+        break;
+        case 4: thunder.addImage(thunder4)
         break;
         default: break;
       }
+      thunder.scale = random(0.3, 0.6)
     }
 
-    for(var i=0; i<Drops.length; i++){
+    if(frameCount % 90 === 0 && thunder) {
+        thunder.destroy()
+    }
+
+    for(var i=0; i< maxDrops; i++){
         Drops[i].display();
         Drops[i].update();
         }
